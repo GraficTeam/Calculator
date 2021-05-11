@@ -1,4 +1,5 @@
 import java.util.*;
+import java.math.*;
 
 class Nodo
 {
@@ -86,7 +87,7 @@ public class ArbolExpresiones
                     }
                 }
 
-                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')   )
+                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')||(caracter=='^'))
                 {
                     Nodo n=pila.pop();
                     n.token=caracter;
@@ -143,6 +144,11 @@ public class ArbolExpresiones
                         break;
                     case '/': aux=n2/n1;
                         break;
+                    case '^':
+                        double exponente;
+                        exponente = Math.pow(n1,n2);
+                        aux = (int)exponente;
+
 
                 }
                 pilaInt.push(aux);
@@ -156,7 +162,7 @@ public class ArbolExpresiones
     public static void main(String args[])
     {
 
-        String exp="{(4+5)*((8/2)-2)}";
+        String exp="{(4+5)*{(8/2)-2}}";
 
         ArbolExpresiones a=new ArbolExpresiones(exp);
         a.generaArbolExp();
