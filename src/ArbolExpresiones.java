@@ -68,7 +68,7 @@ public class ArbolExpresiones
 
             if (!Character.isDigit(caracter))
             {
-                if(caracter=='(')
+                if((caracter=='(')||(caracter=='{'))
                 {
                     if(i==0)
                     {
@@ -86,7 +86,7 @@ public class ArbolExpresiones
                     }
                 }
 
-                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/'))
+                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')   )
                 {
                     Nodo n=pila.pop();
                     n.token=caracter;
@@ -143,6 +143,7 @@ public class ArbolExpresiones
                         break;
                     case '/': aux=n2/n1;
                         break;
+
                 }
                 pilaInt.push(aux);
 
@@ -155,7 +156,7 @@ public class ArbolExpresiones
     public static void main(String args[])
     {
 
-        String exp="((4+5)*((8/2)-2))";
+        String exp="{(4+5)*((8/2)-2)}";
 
         ArbolExpresiones a=new ArbolExpresiones(exp);
         a.generaArbolExp();
