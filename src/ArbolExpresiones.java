@@ -86,7 +86,7 @@ public class ArbolExpresiones
                     }
                 }
 
-                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')||(caracter=='(')||(caracter==')')||(caracter=='{')||(caracter=='}'))
+                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/'))
                 {
                     Nodo n=pila.pop();
                     n.token=caracter;
