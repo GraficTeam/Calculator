@@ -3,6 +3,9 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -27,6 +30,9 @@ import java.awt.Cursor;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Calculador extends JFrame {
 
@@ -34,24 +40,12 @@ public class Calculador extends JFrame {
 	private JPanel contentPane;
 	private int LayoutX;
 	private int LayoutY;
+	protected String contenido; 
 	JButton close = new JButton("");
 	JButton guard = new JButton("");
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Calculador frame = new Calculador();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	ScriptEngineManager sem = new ScriptEngineManager();
+	ScriptEngine se = sem.getEngineByName("JavaScript");
+	private JTextField txt_operacion;
 
 	/**
 	 * Create the frame.
@@ -67,326 +61,583 @@ public class Calculador extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton_24 = new JButton("=");
-		btnNewButton_24.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_24.setForeground(Color.WHITE);
-		btnNewButton_24.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_24.setFocusPainted(false);
-		btnNewButton_24.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_24.setBackground(new Color(0, 0, 51));
-		btnNewButton_24.setBounds(409, 349, 90, 40);
-		contentPane.add(btnNewButton_24);
-		
-		JButton btnNewButton = new JButton("(");
-		btnNewButton.setFocusPainted(false);
-		btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton.setBackground(new Color(47, 79, 79));
-		btnNewButton.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton.setBounds(10, 145, 90, 40);
-		contentPane.add(btnNewButton);
-		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 25, 510, 109);
 		panel.setBackground(new java.awt.Color(27,27,31));	
 		contentPane.add(panel);
 		panel.setLayout(null);
-	
-		JLabel txt_operacion = new JLabel("(5x10+20)");
+		
+		txt_operacion = new JTextField();
+		txt_operacion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char caracter=e.getKeyChar();
+				if(caracter<'(' || caracter>'9' || caracter==',')
+					if(caracter!='[' && caracter!=']' && caracter!='{' && caracter!='}' && caracter!='^')
+						e.consume();
+			}
+		});
+		txt_operacion.setBorder(null);
+		txt_operacion.setOpaque(false);
 		txt_operacion.setForeground(Color.LIGHT_GRAY);
 		txt_operacion.setHorizontalAlignment(SwingConstants.LEFT);
 		txt_operacion.setFont(new Font("Consolas", Font.BOLD, 21));
 		txt_operacion.setBounds(10, 11, 490, 33);
 		panel.add(txt_operacion);
-	
-		JLabel txt_resul = new JLabel("120");
+		txt_operacion.setColumns(10);
+
+		JLabel txt_resul = new JLabel("");
+		txt_resul.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		txt_resul.setForeground(Color.WHITE);
 		txt_resul.setHorizontalAlignment(SwingConstants.RIGHT);
 		txt_resul.setFont(new Font("Consolas", Font.BOLD, 36));
 		txt_resul.setBounds(10, 55, 490, 54);
 		panel.add(txt_resul);
 		
+		JButton btnEqual = new JButton("=");
+		btnEqual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste = ");
+				try { 
+					String res = se.eval(txt_operacion.getText()).toString();
+					txt_resul.setText(res);
+				} catch (ScriptException e) {
+					txt_resul.setText("ERROR");
+				}
+			}
+		});
+		btnEqual.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnEqual.setForeground(Color.WHITE);
+		btnEqual.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnEqual.setFocusPainted(false);
+		btnEqual.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnEqual.setBackground(new Color(0, 0, 51));
+		btnEqual.setBounds(409, 349, 90, 40);
+		contentPane.add(btnEqual);
 		
-		JButton btnNewButton_1 = new JButton(")");
-		btnNewButton_1.setFocusPainted(false);
-		btnNewButton_1.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_1.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_1.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_1.setBackground(new Color(47, 79, 79));
-		btnNewButton_1.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_1.setBounds(109, 145, 90, 40);
-		contentPane.add(btnNewButton_1);
+		JButton btnParAp = new JButton("(");
+		btnParAp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste ( ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "(");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "(");
+			}
+		});
+		btnParAp.setFocusPainted(false);
+		btnParAp.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnParAp.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnParAp.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnParAp.setForeground(Color.WHITE);
+		btnParAp.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnParAp.setBackground(new Color(47, 79, 79));
+		btnParAp.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnParAp.setBounds(10, 145, 90, 40);
+		contentPane.add(btnParAp);
 		
-		JButton btnNewButton_2 = new JButton("[");
-		btnNewButton_2.setFocusPainted(false);
-		btnNewButton_2.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_2.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_2.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_2.setForeground(Color.WHITE);
-		btnNewButton_2.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_2.setBackground(new Color(47, 79, 79));
-		btnNewButton_2.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_2.setBounds(209, 145, 90, 40);
-		contentPane.add(btnNewButton_2);
 		
-		JButton btnNewButton_3 = new JButton("]");
-		btnNewButton_3.setFocusPainted(false);
-		btnNewButton_3.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_3.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_3.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_3.setForeground(Color.WHITE);
-		btnNewButton_3.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_3.setBackground(new Color(47, 79, 79));
-		btnNewButton_3.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_3.setBounds(309, 145, 90, 40);
-		contentPane.add(btnNewButton_3);
+		JButton btnParCer = new JButton(")");
+		btnParCer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste ) ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + ")");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + ")");
+			}
+		});
+		btnParCer.setFocusPainted(false);
+		btnParCer.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnParCer.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnParCer.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnParCer.setForeground(Color.WHITE);
+		btnParCer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnParCer.setBackground(new Color(47, 79, 79));
+		btnParCer.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnParCer.setBounds(109, 145, 90, 40);
+		contentPane.add(btnParCer);
 		
-		JButton btnNewButton_4 = new JButton("C");
-		btnNewButton_4.setFocusPainted(false);
-		btnNewButton_4.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_4.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_4.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_4.setForeground(Color.WHITE);
-		btnNewButton_4.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_4.setBackground(new Color(153, 0, 0));
-		btnNewButton_4.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_4.setBounds(409, 145, 90, 40);
-		contentPane.add(btnNewButton_4);
+		JButton btnCorAp = new JButton("[");
+		btnCorAp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste [ ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "[");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "[");
+			}
+		});
+		btnCorAp.setFocusPainted(false);
+		btnCorAp.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnCorAp.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnCorAp.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnCorAp.setForeground(Color.WHITE);
+		btnCorAp.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnCorAp.setBackground(new Color(47, 79, 79));
+		btnCorAp.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnCorAp.setBounds(209, 145, 90, 40);
+		contentPane.add(btnCorAp);
 		
-		JButton btnNewButton_5 = new JButton("{");
-		btnNewButton_5.setFocusPainted(false);
-		btnNewButton_5.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_5.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_5.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_5.setForeground(Color.WHITE);
-		btnNewButton_5.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_5.setBackground(new Color(47, 79, 79));
-		btnNewButton_5.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_5.setBounds(309, 196, 90, 40);
-		contentPane.add(btnNewButton_5);
+		JButton btnCorCer = new JButton("]");
+		btnCorCer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste ] ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "]");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "]");
+			}
+		});
+		btnCorCer.setFocusPainted(false);
+		btnCorCer.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnCorCer.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnCorCer.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnCorCer.setForeground(Color.WHITE);
+		btnCorCer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnCorCer.setBackground(new Color(47, 79, 79));
+		btnCorCer.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnCorCer.setBounds(309, 145, 90, 40);
+		contentPane.add(btnCorCer);
 		
-		JButton btnNewButton_6 = new JButton("6");
-		btnNewButton_6.setFocusPainted(false);
-		btnNewButton_6.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_6.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_6.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_6.setForeground(Color.WHITE);
-		btnNewButton_6.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_6.setBackground(new Color(32, 34, 37,255));
-		btnNewButton_6.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_6.setBounds(209, 247, 90, 40);
-		contentPane.add(btnNewButton_6);
+		JButton btnC = new JButton("C");
+		btnC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste C ");
+				if(txt_operacion.getText().length() > 0) {
+					txt_operacion.setText(txt_operacion.getText().substring(0, txt_operacion.getText().length()-1));
+					txt_resul.setText("");
+				}
+			}
+		});
+		btnC.setFocusPainted(false);
+		btnC.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnC.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnC.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnC.setForeground(Color.WHITE);
+		btnC.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnC.setBackground(new Color(153, 0, 0));
+		btnC.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnC.setBounds(409, 145, 90, 40);
+		contentPane.add(btnC);
 		
-		JButton btnNewButton_7 = new JButton(".");
-		btnNewButton_7.setFocusPainted(false);
-		btnNewButton_7.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_7.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_7.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_7.setForeground(Color.WHITE);
-		btnNewButton_7.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_7.setBackground(new Color(32, 34, 37,255));
-		btnNewButton_7.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_7.setBounds(10, 349, 90, 40);
-		contentPane.add(btnNewButton_7);
+		JButton btnLlaAp = new JButton("{");
+		btnLlaAp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste { ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "{");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "{");
+			}
+		});
+		btnLlaAp.setFocusPainted(false);
+		btnLlaAp.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnLlaAp.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnLlaAp.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnLlaAp.setForeground(Color.WHITE);
+		btnLlaAp.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLlaAp.setBackground(new Color(47, 79, 79));
+		btnLlaAp.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnLlaAp.setBounds(309, 196, 90, 40);
+		contentPane.add(btnLlaAp);
 		
-		JButton btnNewButton_8 = new JButton("8");
-		btnNewButton_8.setFocusPainted(false);
-		btnNewButton_8.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_8.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_8.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_8.setForeground(Color.WHITE);
-		btnNewButton_8.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_8.setBackground(new Color(32, 34, 37,255));
-		btnNewButton_8.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_8.setBounds(109, 298, 90, 40);
-		contentPane.add(btnNewButton_8);
+		JButton btn6 = new JButton("6");
+		btn6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 6 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "6");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "6");
+			}
+		});
+		btn6.setFocusPainted(false);
+		btn6.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn6.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn6.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn6.setForeground(Color.WHITE);
+		btn6.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn6.setBackground(new Color(32, 34, 37,255));
+		btn6.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn6.setBounds(209, 247, 90, 40);
+		contentPane.add(btn6);
+		
+		JButton btnPun = new JButton(".");
+		btnPun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste . ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + ".");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + ".");
+			}
+		});
+		btnPun.setFocusPainted(false);
+		btnPun.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnPun.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnPun.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnPun.setForeground(Color.WHITE);
+		btnPun.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnPun.setBackground(new Color(32, 34, 37,255));
+		btnPun.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnPun.setBounds(10, 349, 90, 40);
+		contentPane.add(btnPun);
+		
+		JButton btn8 = new JButton("8");
+		btn8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 8 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "8");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "8");
+			}
+		});
+		btn8.setFocusPainted(false);
+		btn8.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn8.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn8.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn8.setForeground(Color.WHITE);
+		btn8.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn8.setBackground(new Color(32, 34, 37,255));
+		btn8.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn8.setBounds(109, 298, 90, 40);
+		contentPane.add(btn8);
 		this.repaint();
 		setLocationRelativeTo(null);
 		
-		JButton btnNewButton_9 = new JButton("1");
-		btnNewButton_9.setFocusPainted(false);
-		btnNewButton_9.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_9.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_9.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_9.setForeground(Color.WHITE);
-		btnNewButton_9.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_9.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_9.setBackground(new Color(32, 34, 37));
-		btnNewButton_9.setBounds(10, 196, 90, 40);
-		contentPane.add(btnNewButton_9);
+		JButton btn1 = new JButton("1");
+		btn1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 1 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "1");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "1");
+			}
+		});
+		btn1.setFocusPainted(false);
+		btn1.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn1.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn1.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn1.setForeground(Color.WHITE);
+		btn1.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn1.setBackground(new Color(32, 34, 37));
+		btn1.setBounds(10, 196, 90, 40);
+		contentPane.add(btn1);
 		
-		JButton btnNewButton_10 = new JButton("2");
-		btnNewButton_10.setFocusPainted(false);
-		btnNewButton_10.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_10.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_10.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_10.setForeground(Color.WHITE);
-		btnNewButton_10.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_10.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_10.setBackground(new Color(32, 34, 37));
-		btnNewButton_10.setBounds(109, 196, 90, 40);
-		contentPane.add(btnNewButton_10);
+		JButton btn2 = new JButton("2");
+		btn2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 2 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "2");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "2");
+			}
+		});
+		btn2.setFocusPainted(false);
+		btn2.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn2.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn2.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn2.setForeground(Color.WHITE);
+		btn2.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn2.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn2.setBackground(new Color(32, 34, 37));
+		btn2.setBounds(109, 196, 90, 40);
+		contentPane.add(btn2);
 		
-		JButton btnNewButton_11 = new JButton("3");
-		btnNewButton_11.setFocusPainted(false);
-		btnNewButton_11.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_11.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_11.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_11.setForeground(Color.WHITE);
-		btnNewButton_11.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_11.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_11.setBackground(new Color(32, 34, 37));
-		btnNewButton_11.setBounds(209, 196, 90, 40);
-		contentPane.add(btnNewButton_11);
+		JButton btn3 = new JButton("3");
+		btn3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 3 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "3");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "3");
+			}
+		});
+		btn3.setFocusPainted(false);
+		btn3.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn3.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn3.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn3.setForeground(Color.WHITE);
+		btn3.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn3.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn3.setBackground(new Color(32, 34, 37));
+		btn3.setBounds(209, 196, 90, 40);
+		contentPane.add(btn3);
 		
-		JButton btnNewButton_12 = new JButton("CE");
-		btnNewButton_12.setFocusPainted(false);
-		btnNewButton_12.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_12.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_12.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_12.setForeground(Color.WHITE);
-		btnNewButton_12.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_12.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_12.setBackground(new Color(153, 0, 0));
-		btnNewButton_12.setBounds(409, 196, 91, 40);
-		contentPane.add(btnNewButton_12);
+		JButton btnCE = new JButton("CE");
+		btnCE.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste CE ");
+				txt_operacion.setText("");
+				txt_resul.setText("");
+			}
+		});
+		btnCE.setFocusPainted(false);
+		btnCE.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnCE.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnCE.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnCE.setForeground(Color.WHITE);
+		btnCE.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnCE.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnCE.setBackground(new Color(153, 0, 0));
+		btnCE.setBounds(409, 196, 91, 40);
+		contentPane.add(btnCE);
 		
-		JButton btnNewButton_13 = new JButton("4");
-		btnNewButton_13.setFocusPainted(false);
-		btnNewButton_13.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_13.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_13.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_13.setForeground(Color.WHITE);
-		btnNewButton_13.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_13.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_13.setBackground(new Color(32, 34, 37));
-		btnNewButton_13.setBounds(10, 247, 90, 40);
-		contentPane.add(btnNewButton_13);
+		JButton btn4 = new JButton("4");
+		btn4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 4 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "4");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "4");
+			}
+		});
+		btn4.setFocusPainted(false);
+		btn4.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn4.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn4.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn4.setForeground(Color.WHITE);
+		btn4.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn4.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn4.setBackground(new Color(32, 34, 37));
+		btn4.setBounds(10, 247, 90, 40);
+		contentPane.add(btn4);
 		
-		JButton btnNewButton_14 = new JButton("5");
-		btnNewButton_14.setFocusPainted(false);
-		btnNewButton_14.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_14.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_14.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_14.setForeground(Color.WHITE);
-		btnNewButton_14.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_14.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_14.setBackground(new Color(32, 34, 37));
-		btnNewButton_14.setBounds(109, 247, 90, 40);
-		contentPane.add(btnNewButton_14);
+		JButton btn5 = new JButton("5");
+		btn5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 5 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "5");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "5");
+			}
+		});
+		btn5.setFocusPainted(false);
+		btn5.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn5.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn5.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn5.setForeground(Color.WHITE);
+		btn5.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn5.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn5.setBackground(new Color(32, 34, 37));
+		btn5.setBounds(109, 247, 90, 40);
+		contentPane.add(btn5);
 		
-		JButton btnNewButton_15 = new JButton("}");
-		btnNewButton_15.setFocusPainted(false);
-		btnNewButton_15.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_15.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_15.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_15.setForeground(Color.WHITE);
-		btnNewButton_15.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_15.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_15.setBackground(new Color(47, 79, 79));
-		btnNewButton_15.setBounds(309, 247, 90, 40);
-		contentPane.add(btnNewButton_15);
+		JButton btnLlaCer = new JButton("}");
+		btnLlaCer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste } ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "}");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "}");
+			}
+		});
+		btnLlaCer.setFocusPainted(false);
+		btnLlaCer.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnLlaCer.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnLlaCer.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnLlaCer.setForeground(Color.WHITE);
+		btnLlaCer.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnLlaCer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLlaCer.setBackground(new Color(47, 79, 79));
+		btnLlaCer.setBounds(309, 247, 90, 40);
+		contentPane.add(btnLlaCer);
 		
-		JButton btnNewButton_16 = new JButton("+");
-		btnNewButton_16.setFocusPainted(false);
-		btnNewButton_16.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_16.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_16.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_16.setForeground(Color.WHITE);
-		btnNewButton_16.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_16.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_16.setBackground(new Color(47, 79, 79));
-		btnNewButton_16.setBounds(409, 247, 91, 40);
-		contentPane.add(btnNewButton_16);
+		JButton btnSum = new JButton("+");
+		btnSum.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste + ");
+				txt_operacion.setText(txt_operacion.getText() + "+");
+			}
+		});
+		btnSum.setFocusPainted(false);
+		btnSum.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnSum.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnSum.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnSum.setForeground(Color.WHITE);
+		btnSum.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnSum.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnSum.setBackground(new Color(47, 79, 79));
+		btnSum.setBounds(409, 247, 91, 40);
+		contentPane.add(btnSum);
 		
-		JButton btnNewButton_17 = new JButton("7");
-		btnNewButton_17.setFocusPainted(false);
-		btnNewButton_17.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_17.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_17.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_17.setForeground(Color.WHITE);
-		btnNewButton_17.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_17.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_17.setBackground(new Color(32, 34, 37));
-		btnNewButton_17.setBounds(10, 298, 90, 40);
-		contentPane.add(btnNewButton_17);
+		JButton btn7 = new JButton("7");
+		btn7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 7 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "7");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "7");
+			}
+		});
+		btn7.setFocusPainted(false);
+		btn7.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn7.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn7.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn7.setForeground(Color.WHITE);
+		btn7.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn7.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn7.setBackground(new Color(32, 34, 37));
+		btn7.setBounds(10, 298, 90, 40);
+		contentPane.add(btn7);
 		
-		JButton btnNewButton_18 = new JButton("9");
-		btnNewButton_18.setFocusPainted(false);
-		btnNewButton_18.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_18.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_18.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_18.setForeground(Color.WHITE);
-		btnNewButton_18.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_18.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_18.setBackground(new Color(32, 34, 37));
-		btnNewButton_18.setBounds(209, 298, 90, 40);
-		contentPane.add(btnNewButton_18);
+		JButton btn9 = new JButton("9");
+		btn9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 9 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "9");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "9");
+			}
+		});
+		btn9.setFocusPainted(false);
+		btn9.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn9.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn9.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn9.setForeground(Color.WHITE);
+		btn9.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn9.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn9.setBackground(new Color(32, 34, 37));
+		btn9.setBounds(209, 298, 90, 40);
+		contentPane.add(btn9);
 		
-		JButton btnNewButton_19 = new JButton("*");
-		btnNewButton_19.setFocusPainted(false);
-		btnNewButton_19.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_19.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_19.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_19.setForeground(Color.WHITE);
-		btnNewButton_19.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_19.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_19.setBackground(new Color(47, 79, 79));
-		btnNewButton_19.setBounds(309, 298, 90, 40);
-		contentPane.add(btnNewButton_19);
+		JButton btnMul = new JButton("*");
+		btnMul.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste * ");
+				txt_operacion.setText(txt_operacion.getText() + "*");
+			}
+		});
+		btnMul.setFocusPainted(false);
+		btnMul.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnMul.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnMul.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnMul.setForeground(Color.WHITE);
+		btnMul.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnMul.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnMul.setBackground(new Color(47, 79, 79));
+		btnMul.setBounds(309, 298, 90, 40);
+		contentPane.add(btnMul);
 		
-		JButton btnNewButton_20 = new JButton("-");
-		btnNewButton_20.setFocusPainted(false);
-		btnNewButton_20.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_20.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_20.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_20.setForeground(Color.WHITE);
-		btnNewButton_20.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_20.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_20.setBackground(new Color(47, 79, 79));
-		btnNewButton_20.setBounds(409, 298, 91, 40);
-		contentPane.add(btnNewButton_20);
+		JButton btnRes = new JButton("-");
+		btnRes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste - ");
+				txt_operacion.setText(txt_operacion.getText() + "-");
+			}
+		});
+		btnRes.setFocusPainted(false);
+		btnRes.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnRes.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnRes.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnRes.setForeground(Color.WHITE);
+		btnRes.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnRes.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnRes.setBackground(new Color(47, 79, 79));
+		btnRes.setBounds(409, 298, 91, 40);
+		contentPane.add(btnRes);
 		
-		JButton btnNewButton_21 = new JButton("0");
-		btnNewButton_21.setFocusPainted(false);
-		btnNewButton_21.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_21.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_21.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_21.setForeground(Color.WHITE);
-		btnNewButton_21.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_21.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_21.setBackground(new Color(32, 34, 37));
-		btnNewButton_21.setBounds(109, 349, 90, 40);
-		contentPane.add(btnNewButton_21);
+		JButton btn0 = new JButton("0");
+		btn0.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste 0 ");
+				if(txt_resul.getText().length() > 0) {
+					txt_operacion.setText("");
+					txt_resul.setText("");
+					txt_operacion.setText(txt_operacion.getText() + "0");
+				}else
+					txt_operacion.setText(txt_operacion.getText() + "0");
+			}
+		});
+		btn0.setFocusPainted(false);
+		btn0.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn0.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btn0.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btn0.setForeground(Color.WHITE);
+		btn0.setFont(new Font("Consolas", Font.BOLD, 25));
+		btn0.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btn0.setBackground(new Color(32, 34, 37));
+		btn0.setBounds(109, 349, 90, 40);
+		contentPane.add(btn0);
 		
-		JButton btnNewButton_22 = new JButton("^");
-		btnNewButton_22.setFocusPainted(false);
-		btnNewButton_22.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_22.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_22.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_22.setForeground(Color.WHITE);
-		btnNewButton_22.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_22.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_22.setBackground(new Color(32, 34, 37));
-		btnNewButton_22.setBounds(209, 349, 90, 40);
-		contentPane.add(btnNewButton_22);
+		JButton btnPot = new JButton("^");
+		btnPot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste ^ ");
+				txt_operacion.setText(txt_operacion.getText() + "^");
+			}
+		});
+		btnPot.setFocusPainted(false);
+		btnPot.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnPot.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnPot.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnPot.setForeground(Color.WHITE);
+		btnPot.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnPot.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnPot.setBackground(new Color(32, 34, 37));
+		btnPot.setBounds(209, 349, 90, 40);
+		contentPane.add(btnPot);
 		
-		JButton btnNewButton_23 = new JButton("/");
-		btnNewButton_23.setFocusPainted(false);
-		btnNewButton_23.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton_23.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
-		btnNewButton_23.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
-		btnNewButton_23.setForeground(Color.WHITE);
-		btnNewButton_23.setFont(new Font("Consolas", Font.BOLD, 25));
-		btnNewButton_23.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnNewButton_23.setBackground(new Color(47, 79, 79));
-		btnNewButton_23.setBounds(309, 349, 90, 40);
-		contentPane.add(btnNewButton_23);
+		JButton btnDiv = new JButton("/");
+		btnDiv.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Presionaste / ");
+				txt_operacion.setText(txt_operacion.getText() + "/");
+			}
+		});
+		btnDiv.setFocusPainted(false);
+		btnDiv.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnDiv.setPressedIcon(new ImageIcon("images\btn3_pressed_dark.png"));
+		btnDiv.setRolloverIcon(new ImageIcon("images\btn3_dark.png"));
+		btnDiv.setForeground(Color.WHITE);
+		btnDiv.setFont(new Font("Consolas", Font.BOLD, 25));
+		btnDiv.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnDiv.setBackground(new Color(47, 79, 79));
+		btnDiv.setBounds(309, 349, 90, 40);
+		contentPane.add(btnDiv);
 		
 		JLabel mate = new JLabel("");
 		mate.setBounds(0, 134, 510, 266);
