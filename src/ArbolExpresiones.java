@@ -116,7 +116,7 @@ public class ArbolExpresiones
     }
 
 
-    public void evaluaExp()
+    public String evaluaExp()
     {
         int aux=0;
         System.out.print(arreglo);
@@ -155,18 +155,19 @@ public class ArbolExpresiones
 
             }
         }
-        System.out.println("\n"+pilaInt.pop());
+       return "="+pilaInt.pop();
     }
 
 
     public static void main(String args[])
     {
 
-        String exp="{(4+5)*{(8/2)-2}}";
+        String exp="{(4^2)*{(8/2)-2}}";
 
         ArbolExpresiones a=new ArbolExpresiones(exp);
         a.generaArbolExp();
         a.PosOrden(a.raiz);
         a.evaluaExp();
+        
     }
 }
