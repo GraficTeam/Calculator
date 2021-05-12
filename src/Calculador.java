@@ -182,8 +182,8 @@ public class Calculador extends JFrame {
 					arbol.generaArbolExp();
 					arbol.PosOrden(arbol.raiz);
 					String res=arbol.evaluaExp();
-					if(res.equals("Infinity")) {
-						JOptionPane.showMessageDialog(null,"No puede dividir entre 0", "Error", JOptionPane.WARNING_MESSAGE);
+					if(res.equals("Infinity") || res.equals("-Infinity")) {
+						JOptionPane.showMessageDialog(null,"No puede dividir entre 0", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 					else {
 						txt_resul.setText(res);
@@ -847,19 +847,19 @@ public class Calculador extends JFrame {
     	String cadena=txt_operacion.getText();
 		String mensaje=evaluador.verifica1(cadena);
 		if(mensaje!=null)
-			JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 		else {
 			mensaje=evaluador.verifica3(cadena);
 			if(mensaje!=null)
-				JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 			else {
 				mensaje=evaluador.verifica2(cadena);
 				if(mensaje!=null)
-					JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 				else {
 					mensaje=evaluador.verifica4(cadena);
 					if(mensaje!=null)
-						JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 					
 				}
 			}
