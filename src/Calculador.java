@@ -49,10 +49,16 @@ public class Calculador extends JFrame {
 	ScriptEngineManager sem = new ScriptEngineManager();
 	ScriptEngine se = sem.getEngineByName("JavaScript");
 	private JTextField txt_operacion;
-	private JLabel txt_resul = new JLabel("");
+	private JTextField txt_resul;
 	private Evaluador_de_expresiones evaluador= new Evaluador_de_expresiones();
-	ArbolExpresiones arbol;
-
+	private ArbolExpresiones arbol;
+	private String auxi=null;
+	JButton Preorden = new JButton("PreOrden");
+	JButton Enorden = new JButton("EnOrden");
+	JButton Posorden = new JButton("PosOrden");
+	JButton back = new JButton("ATRAS");
+	
+	
 	/**
 	 * Create the frame.
 	 */
@@ -69,30 +75,75 @@ public class Calculador extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		boton();
+		Posorden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(arbol!=null) {
+					arbol.PosOrden(arbol.raiz);
+					txt_operacion.setText("Recorrido en PosOrden");
+					txt_resul.setText(arbol.arreglo.toString());
+					arbol.vaciarRe();
+				}
+			}
+		});
 		
-		JButton Posorden = new JButton("PosOrden");
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(auxi!=null) {
+					ArbolExpresiones a=new ArbolExpresiones(auxi);
+					a.generaArbolExp();
+					a.PosOrden(arbol.raiz);
+					String res=a.evaluaExp();
+					txt_operacion.setText(auxi);
+					txt_resul.setText(res);
+					a.vaciarRe();
+				}
+			}
+		});
+		back.setHorizontalTextPosition(SwingConstants.CENTER);
+		back.setForeground(Color.WHITE);
+		back.setFont(new Font("Consolas", Font.BOLD, 10));
+		back.setFocusPainted(false);
+		back.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		back.setBackground(new Color(183, 142, 36));
+		back.setBounds(397, 400, 90, 25);
+		contentPane.add(back);
 		Posorden.setHorizontalTextPosition(SwingConstants.CENTER);
 		Posorden.setForeground(Color.WHITE);
 		Posorden.setFont(new Font("Consolas", Font.BOLD, 10));
 		Posorden.setFocusPainted(false);
 		Posorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		Posorden.setBackground(new Color(183,142,36,255));
-		Posorden.setBounds(369, 400, 90, 25);
+		Posorden.setBounds(273, 400, 90, 25);
 		contentPane.add(Posorden);
 		
-		JButton Enorden = new JButton("EnOrden");
+		Enorden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(arbol!=null) {
+					arbol.enOrden(arbol.raiz);
+					txt_operacion.setText("Recorrido EnOrden");
+					txt_resul.setText(arbol.arreglo.toString());
+					arbol.vaciarRe();
+				}
+			}
+		});
 		Enorden.setHorizontalTextPosition(SwingConstants.CENTER);
 		Enorden.setForeground(Color.WHITE);
 		Enorden.setFont(new Font("Consolas", Font.BOLD, 10));
 		Enorden.setFocusPainted(false);
 		Enorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		Enorden.setBackground(new Color(183,142,36,255));
-		Enorden.setBounds(209, 400, 90, 25);
+		Enorden.setBounds(145, 400, 90, 25);
 		contentPane.add(Enorden);
 		
-		JButton Preorden = new JButton("PreOrden");
 		Preorden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(arbol!=null) {
+					arbol.preOrden(arbol.raiz);
+					txt_operacion.setText("Recorrido en Preorden");
+					txt_resul.setText(arbol.arreglo.toString());
+					arbol.vaciarRe();
+				}
 			}
 		});
 		Preorden.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -101,7 +152,7 @@ public class Calculador extends JFrame {
 		Preorden.setFocusPainted(false);
 		Preorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		Preorden.setBackground(new Color(183,142,36,255));
-		Preorden.setBounds(55, 400, 90, 25);
+		Preorden.setBounds(20, 400, 90, 25);
 		contentPane.add(Preorden);
 		
 		JPanel panel = new JPanel();
@@ -128,7 +179,10 @@ public class Calculador extends JFrame {
 		txt_operacion.setBounds(10, 11, 490, 33);
 		panel.add(txt_operacion);
 		txt_operacion.setColumns(10);
-
+		
+		txt_resul=new JTextField();
+		txt_resul.setBorder(null);
+		txt_resul.setOpaque(false);
 		txt_resul.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		txt_resul.setForeground(Color.WHITE);
 		txt_resul.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -145,7 +199,9 @@ public class Calculador extends JFrame {
 					arbol.PosOrden(arbol.raiz);
 					String res=arbol.evaluaExp();
 					txt_resul.setText(res);
+					arbol.vaciarRe();
 				}
+				boton();
 			}
 		});
 		btnEqual.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -257,6 +313,9 @@ public class Calculador extends JFrame {
 				if(txt_operacion.getText().length() > 0) {
 					txt_operacion.setText(txt_operacion.getText().substring(0, txt_operacion.getText().length()-1));
 					txt_resul.setText("");
+					auxi=null;
+					arbol=null;
+					boton();
 				}
 			}
 		});
@@ -440,6 +499,9 @@ public class Calculador extends JFrame {
 				//System.out.println("Presionaste CE ");
 				txt_operacion.setText("");
 				txt_resul.setText("");
+				auxi=null;
+				arbol=null;
+				boton();
 			}
 		});
 		btnCE.setFocusPainted(false);
@@ -820,10 +882,26 @@ public class Calculador extends JFrame {
 		
 		if(mensaje==null){
 			ArbolExpresiones arbol=new ArbolExpresiones(cadena);
+			auxi=cadena;
 			return arbol;
 		}
 		else {
 			return null;
 		}
+    }
+    
+    private void boton() {
+    	if(arbol!=null) {
+    		Preorden.setEnabled(true);
+    		Enorden.setEnabled(true);
+    		Posorden.setEnabled(true);
+    		back.setEnabled(true);
+    	}
+    	else {
+    		Preorden.setEnabled(false);
+    		Enorden.setEnabled(false);
+    		Posorden.setEnabled(false);
+    		back.setEnabled(false);
+    	}
     }
 }

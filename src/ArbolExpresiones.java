@@ -39,7 +39,6 @@ public class ArbolExpresiones
     Nodo raiz;
     Stack<Nodo> pila;
     ArrayList<String> arreglo;
-    ArrayList<String> recorrido;
     Stack<Float> pilaInt;
 
 
@@ -129,9 +128,8 @@ public class ArbolExpresiones
 	   if (n!=null)
 	    {
 	     enOrden(n.hijoIzq);
-	     //System.out.print("--> "+((Integer)n.obtenDato()).intValue());
+	     arreglo.add(n.token);
 	     enOrden(n.hijoDer);
-	     recorrido.add(n.token);
 	    }
 	 }
     
@@ -139,15 +137,14 @@ public class ArbolExpresiones
 	  {
 	   if (n!=null)
 	    {
-	     //System.out.print("--> "+((Integer)n.obtenDato()).intValue());
+		 arreglo.add(n.token);
 	     preOrden(n.hijoIzq);
 	     preOrden(n.hijoDer);
-	     recorrido.add(n.token);
 	    }
 	  }
     
     public void vaciarRe() {
-    	recorrido.clear();
+    	arreglo.clear();
     }
     
     public String evaluaExp()
@@ -169,8 +166,8 @@ public class ArbolExpresiones
                     case '*': aux=n1*n2;
                         break;
                     case '-':
-                        if (n2 >0){
-                            n2 = -n2;
+                        if (n1 >0){
+                            n1 = -n1;
                         }
                         aux = n1+n2;
                         break;
