@@ -3,24 +3,24 @@ import java.math.*;
 
 class Nodo
 {
-    public char token;
+    public String token;
     public Nodo hijoIzq, hijoDer;
 
     public Nodo()
     {
-        token=' ';
+        token="";
         hijoIzq=null;
         hijoDer=null;
     }
 
-    public Nodo(char token)
+    public Nodo(String token)
     {
         this.token=token;
         hijoIzq=null;
         hijoDer=null;
     }
 
-    public Nodo(char token, Nodo hijoIzq, Nodo hijoDer)
+    public Nodo(String token, Nodo hijoIzq, Nodo hijoDer)
     {
         this.token=token;
         this.hijoIzq=hijoIzq;
@@ -38,7 +38,7 @@ public class ArbolExpresiones
     String expresion;
     Nodo raiz;
     Stack<Nodo> pila;
-    ArrayList<Character> arreglo;
+    ArrayList<String> arreglo;
     Stack<Integer> pilaInt;
 
 
@@ -47,7 +47,7 @@ public class ArbolExpresiones
         this.expresion=expresion;
         raiz=null;
         pila=new Stack<Nodo>();
-        arreglo=new ArrayList<Character>();
+        arreglo=new ArrayList<String>();
         pilaInt=new Stack<Integer>();
     }
 
@@ -60,45 +60,54 @@ public class ArbolExpresiones
 
     public void generaArbolExp()
     {
+    	StringBuilder cadena=new StringBuilder();
         char caracter;
         Nodo nodoActual=null;
 
         for(int i=0;i<expresion.length();i++)
         {
             caracter=expresion.charAt(i);
-
             if (!Character.isDigit(caracter))
             {
-                if((caracter=='(')||(caracter=='{'))
-                {
-                    if(i==0)
-                    {
-                        raiz=new Nodo();
-                        nodoActual=raiz;
-                        pila.push(nodoActual);
-                    }
-                    else{
-                        Nodo n=new Nodo();
+            	if(caracter=='.') {
+            		cadena.append(caracter);
+            	}
+            	else {
+            		if(cadena.length()>0) {
+                		Nodo n=new Nodo(cadena.toString());
                         if (nodoActual.hijoIzq==null)
                             nodoActual.hijoIzq=n;
                         else nodoActual.hijoDer=n;
-                        nodoActual=n;
-                        pila.push(nodoActual);
+                        cadena.delete(0, cadena.length());
+                	}
+                    if((caracter=='(')||(caracter=='{'))
+                    {
+                        if(i==0)
+                        {
+                            raiz=new Nodo();
+                            nodoActual=raiz;
+                            pila.push(nodoActual);
+                        }
+                        else{
+                            Nodo n=new Nodo();
+                            if (nodoActual.hijoIzq==null)
+                                nodoActual.hijoIzq=n;
+                            else nodoActual.hijoDer=n;
+                            nodoActual=n;
+                            pila.push(nodoActual);
+                        }
                     }
-                }
 
-                if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')||(caracter=='^'))
-                {
-                    Nodo n=pila.pop();
-                    n.token=caracter;
-                    nodoActual=n;
-                }
+                    if((caracter=='*')||(caracter=='+')||(caracter=='-')||(caracter=='/')||(caracter=='^'))
+                    {
+                        Nodo n=pila.pop();
+                        n.token=Character.toString(caracter);
+                        nodoActual=n;
+                    }
+            	}
             }
             else {
-                Nodo n=new Nodo(caracter);
-                if (nodoActual.hijoIzq==null)
-                    nodoActual.hijoIzq=n;
-                else nodoActual.hijoDer=n;
+            	cadena.append(caracter);
             }
         }
     }
@@ -122,15 +131,15 @@ public class ArbolExpresiones
         System.out.print(arreglo);
         for(int i=0;i<arreglo.size();i++)
         {
-            Character car=arreglo.get(i);
-            if (Character.isDigit(car))
+            String car=arreglo.get(i);
+            if (isNumeric(car))
             {
-                pilaInt.push(Character.getNumericValue(car));
+                pilaInt.push(Integer.parseInt(car));
             }
             else{
                 int n1=pilaInt.pop();
                 int n2=pilaInt.pop();
-                switch(arreglo.get(i))
+                switch(arreglo.get(i).charAt(0))
                 {
                     case '*': aux=n1*n2;
                         break;
@@ -146,28 +155,35 @@ public class ArbolExpresiones
                         break;
                     case '^':
                         double exponente;
-                        exponente = Math.pow(n1,n2);
+                        exponente = Math.pow(n2,n1);
                         aux = (int)exponente;
-
+                        break;
 
                 }
                 pilaInt.push(aux);
 
             }
         }
-       return "="+pilaInt.pop();
+       return ""+pilaInt.pop();
     }
 
-
+    public static boolean isNumeric(String cadena) {
+    	boolean resultado;
+    	try {
+    		Integer.parseInt(cadena);
+    		resultado=true;
+    	}catch(NumberFormatException e) {
+    		resultado = false;
+    	}
+    	return resultado;
+    }
+    
     public static void main(String args[])
     {
-
         String exp="{(4^2)*{(8/2)-2}}";
-
         ArbolExpresiones a=new ArbolExpresiones(exp);
         a.generaArbolExp();
         a.PosOrden(a.raiz);
         a.evaluaExp();
-        
     }
 }
