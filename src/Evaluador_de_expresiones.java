@@ -30,7 +30,7 @@ public class Evaluador_de_expresiones {
 	            else {
 	            	//La pila esta vacia y el caracter es un carater de clausura
 	            	mensaje="Error de llave que cierra se esperaba llave de apertura";
-	            	System.out.println("Error de llave que cierra se esperaba llave de apertura");
+	            	//System.out.println("Error de llave que cierra se esperaba llave de apertura");
 	                error=true;//Se activa la bandera de error para finalizar el programa
 	            }
 	        }
@@ -49,7 +49,7 @@ public class Evaluador_de_expresiones {
                 else {
                 	//La pila esta vacia y el caracter es un carater de clausura
                 	mensaje="Error de corchete que cierra se esperaba corchete de apertura";
-                	System.out.println("Error de corchete que cierra se esperaba corchete de apertura");
+                	//System.out.println("Error de corchete que cierra se esperaba corchete de apertura");
                     error=true;//Se activa la bandera de error para finalizar el programa
                 	 
                 }
@@ -70,7 +70,7 @@ public class Evaluador_de_expresiones {
                 else {
                 	//La pila esta vacia y el caracter es un carater de clausura
                 	mensaje="Error de parentesis que cierra se esperaba parentesis de apertura"; 
-                	System.out.println("Error de parentesis que cierra se esperaba parentesis de apertura");        
+                	//System.out.println("Error de parentesis que cierra se esperaba parentesis de apertura");        
                     error=true;//Se activa la bandera de error para finalizar el programa
                 }
             }
@@ -79,7 +79,7 @@ public class Evaluador_de_expresiones {
         }
       //La pila vacia simboliza que todos los caracteres cerraron, y no hubo error de que el primer caracter fuera uno de clausura
         if(pila.empty() && error==false && error2==false){ 
-            System.out.println("Todos los simbolos estan balanceados");
+            //System.out.println("Todos los simbolos estan balanceados");
            
         }
         else{
@@ -87,16 +87,16 @@ public class Evaluador_de_expresiones {
         	if(error==false && error2==false) {//El error no fue de que el primer caracter fuera uno de clausura
             	if(pila.peek().equals('{')) {
             		mensaje="Error de llave que abre falta llave que cierra";
-                    System.out.println("Error de llave que abre falta llave que cierra");
+                    //System.out.println("Error de llave que abre falta llave que cierra");
             	}
             	if(pila.peek().equals('['))
             	{
             		mensaje="Error de corchete que abre falta corchete que cierra";
-            		System.out.println("Error de corchete que abre falta corchete que cierra");
+            		//System.out.println("Error de corchete que abre falta corchete que cierra");
             	}
             	if(pila.peek().equals('(')) {
             		mensaje="Error de parentesis que abre falta parentesis que cierra";
-            		System.out.println("Error de parentesis que abre falta parentesis que cierra");
+            		//System.out.println("Error de parentesis que abre falta parentesis que cierra");
             	}
         	}else {//error2 indica que el caracter de cerradura no concuerda con el de apertura
         		if(error==false) {
@@ -109,14 +109,14 @@ public class Evaluador_de_expresiones {
         		}
         		if(fallo=='}') {
         			mensaje="Error de llave que cierra"+cadena;
-            		System.out.println("Error de llave que cierra"+cadena);
+            		//System.out.println("Error de llave que cierra"+cadena);
         		}
             	if(fallo==']')
             		mensaje="Error de corchete que cierra"+cadena;
-                    System.out.println("Error de corchete que cierra"+cadena);
+                   // System.out.println("Error de corchete que cierra"+cadena);
             	if(fallo==')') {
             		mensaje="Error de parentesis que cierra"+cadena;
-                    System.out.println("Error de parentesis que cierra"+cadena);
+                    //System.out.println("Error de parentesis que cierra"+cadena);
             	}
         	}
         	}
@@ -139,13 +139,15 @@ public class Evaluador_de_expresiones {
 	    			 if(expresion.charAt(iCont)=='+'||expresion.charAt(iCont)=='-'||expresion.charAt(iCont)=='*'||expresion.charAt(iCont)=='/'||expresion.charAt(iCont)=='^')
 						contadorOP++;
 	    	 }
-	    	 if(contadorOP==0)
-	    		 //System.out.println("No hay operador");
-	    		 mensaje="No hay operador";
+	    	
 	    	 if(contadorOP==contadorSA)
 	    		 //System.out.println("Todo bien");
 	    		 mensaje=null;
 	    	 else
+	    		 if(contadorOP==0)
+		    		 //System.out.println("No hay operador");
+		    		 mensaje="No hay operador";
+	    		 else
 	    		 //System.out.println("Cada operacion debe estar encerrada con signos de agurpacion"); 
 	    		 mensaje="Cada operacion debe estar encerrada con signos de agrupacion";
 	    	 return mensaje;
@@ -163,7 +165,7 @@ public class Evaluador_de_expresiones {
 	            if(Character.isDigit(expresion.charAt(i))){
 	                if(carant==')'||carant=='}'||carant==']'){
 	                    mensaje="Error, no se puede poner un numero despues de un signo de agrupacion de cerradura (],),})\n";
-	                    System.out.println(""+mensaje);
+	                   // System.out.println(""+mensaje);
 	                    error=true;                    
 	                }                                       
 	                else{
@@ -182,7 +184,7 @@ public class Evaluador_de_expresiones {
 			                else{
 			                	mensaje="Error, no se puede poner un signo de agrupacion de abertura ([,(,{) despues de un '"+carant+"'";
 			                    //mensaje="Error, despues de un '"+carant+"' no se puede poner un '('\n";
-			                    System.out.println(""+mensaje);
+			                    //System.out.println(""+mensaje);
 			                    error=true;                         
 			                }                                    
 	            	}
@@ -197,7 +199,7 @@ public class Evaluador_de_expresiones {
 	                else{
 	                	mensaje="Error, no se puede poner un signo de agrupacion de cerradura (],),}) despues de un '"+carant+"'";
 	                    //mensaje="Error, despues de un '"+carant+"' no puede poner un ')'\n";
-	                    System.out.println(""+mensaje);
+	                   // System.out.println(""+mensaje);
 	                    error=true;
 	                }                                   
 	            }
@@ -211,7 +213,7 @@ public class Evaluador_de_expresiones {
 	                else{
 	                    mensaje="Error, no se puede poner un operador ('"+expresion.charAt(i)+"') depues de un '"+carant+"'";
 	                    //mensaje="Despues de un '"+carant+"' no puede venir un Operador '"+expresion.charAt(i)+"'\n";
-	                    System.out.println(""+mensaje);
+	                   // System.out.println(""+mensaje);
 	                    error=true;                   
 	                }                                       
 	            }
@@ -225,14 +227,15 @@ public class Evaluador_de_expresiones {
 			boolean error=false;
 	        int i=0;
 	        int iCont=0;
+	        
 	        String mensaje=null;
-	        while(iCont<expresion.length()&&error!=false) {
-	        	System.out.print("\n"+expresion.charAt(iCont));
+	        while(iCont<expresion.length()&&error==false) {
+	        	//System.out.print("\n"+expresion.charAt(iCont));
 	        	if(expresion.charAt(iCont)=='.') {
 	        		i=iCont+1;
 	        		while(error!=true&&expresion.charAt(i)!='+'&&expresion.charAt(i)!='-'&&expresion.charAt(i)!='*'&&expresion.charAt(i)!='/'&&expresion.charAt(i)!='^'){
-	        			System.out.print("\n"+expresion.charAt(i));
-	        			System.out.print("Entre");
+	        			//System.out.print("\n"+expresion.charAt(i));
+	        			//System.out.print("Entre");
 	        			if(expresion.charAt(i)=='.')
 	        				error=true;
 	        			i++;

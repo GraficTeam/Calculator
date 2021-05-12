@@ -160,7 +160,7 @@ public class Calculador extends JFrame {
 		JButton btnParAp = new JButton("(");
 		btnParAp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste ( ");
+				//System.out.println("Presionaste ( ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -184,7 +184,7 @@ public class Calculador extends JFrame {
 		JButton btnParCer = new JButton(")");
 		btnParCer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste ) ");
+				//System.out.println("Presionaste ) ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -207,7 +207,7 @@ public class Calculador extends JFrame {
 		JButton btnCorAp = new JButton("[");
 		btnCorAp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste [ ");
+				//System.out.println("Presionaste [ ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -230,7 +230,7 @@ public class Calculador extends JFrame {
 		JButton btnCorCer = new JButton("]");
 		btnCorCer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste ] ");
+				//System.out.println("Presionaste ] ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -253,7 +253,7 @@ public class Calculador extends JFrame {
 		JButton btnC = new JButton("C");
 		btnC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste C ");
+				//System.out.println("Presionaste C ");
 				if(txt_operacion.getText().length() > 0) {
 					txt_operacion.setText(txt_operacion.getText().substring(0, txt_operacion.getText().length()-1));
 					txt_resul.setText("");
@@ -274,7 +274,7 @@ public class Calculador extends JFrame {
 		JButton btnLlaAp = new JButton("{");
 		btnLlaAp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste { ");
+				//System.out.println("Presionaste { ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -297,7 +297,7 @@ public class Calculador extends JFrame {
 		JButton btn6 = new JButton("6");
 		btn6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 6 ");
+				//System.out.println("Presionaste 6 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -320,7 +320,7 @@ public class Calculador extends JFrame {
 		JButton btnPun = new JButton(".");
 		btnPun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste . ");
+				//System.out.println("Presionaste . ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -343,7 +343,7 @@ public class Calculador extends JFrame {
 		JButton btn8 = new JButton("8");
 		btn8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 8 ");
+				//System.out.println("Presionaste 8 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -368,7 +368,7 @@ public class Calculador extends JFrame {
 		JButton btn1 = new JButton("1");
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 1 ");
+				//System.out.println("Presionaste 1 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -391,7 +391,7 @@ public class Calculador extends JFrame {
 		JButton btn2 = new JButton("2");
 		btn2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 2 ");
+				//System.out.println("Presionaste 2 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -414,7 +414,7 @@ public class Calculador extends JFrame {
 		JButton btn3 = new JButton("3");
 		btn3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 3 ");
+				//System.out.println("Presionaste 3 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -437,7 +437,7 @@ public class Calculador extends JFrame {
 		JButton btnCE = new JButton("CE");
 		btnCE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste CE ");
+				//System.out.println("Presionaste CE ");
 				txt_operacion.setText("");
 				txt_resul.setText("");
 			}
@@ -456,7 +456,7 @@ public class Calculador extends JFrame {
 		JButton btn4 = new JButton("4");
 		btn4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 4 ");
+				//System.out.println("Presionaste 4 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -479,7 +479,7 @@ public class Calculador extends JFrame {
 		JButton btn5 = new JButton("5");
 		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 5 ");
+				//System.out.println("Presionaste 5 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -502,7 +502,7 @@ public class Calculador extends JFrame {
 		JButton btnLlaCer = new JButton("}");
 		btnLlaCer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste } ");
+				//System.out.println("Presionaste } ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -525,7 +525,7 @@ public class Calculador extends JFrame {
 		JButton btnSum = new JButton("+");
 		btnSum.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste + ");
+				//System.out.println("Presionaste + ");
 				txt_operacion.setText(txt_operacion.getText() + "+");
 			}
 		});
@@ -543,7 +543,7 @@ public class Calculador extends JFrame {
 		JButton btn7 = new JButton("7");
 		btn7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 7 ");
+				//System.out.println("Presionaste 7 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -566,7 +566,7 @@ public class Calculador extends JFrame {
 		JButton btn9 = new JButton("9");
 		btn9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 9 ");
+				//System.out.println("Presionaste 9 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -589,7 +589,7 @@ public class Calculador extends JFrame {
 		JButton btnMul = new JButton("*");
 		btnMul.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste * ");
+				//System.out.println("Presionaste * ");
 				txt_operacion.setText(txt_operacion.getText() + "*");
 			}
 		});
@@ -607,7 +607,7 @@ public class Calculador extends JFrame {
 		JButton btnRes = new JButton("-");
 		btnRes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste - ");
+				//System.out.println("Presionaste - ");
 				txt_operacion.setText(txt_operacion.getText() + "-");
 			}
 		});
@@ -625,7 +625,7 @@ public class Calculador extends JFrame {
 		JButton btn0 = new JButton("0");
 		btn0.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste 0 ");
+				//System.out.println("Presionaste 0 ");
 				if(txt_resul.getText().length() > 0) {
 					txt_operacion.setText("");
 					txt_resul.setText("");
@@ -648,7 +648,7 @@ public class Calculador extends JFrame {
 		JButton btnPot = new JButton("^");
 		btnPot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste ^ ");
+				//System.out.println("Presionaste ^ ");
 				txt_operacion.setText(txt_operacion.getText() + "^");
 			}
 		});
@@ -666,7 +666,7 @@ public class Calculador extends JFrame {
 		JButton btnDiv = new JButton("/");
 		btnDiv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Presionaste / ");
+				//System.out.println("Presionaste / ");
 				txt_operacion.setText(txt_operacion.getText() + "/");
 			}
 		});
@@ -816,7 +816,7 @@ public class Calculador extends JFrame {
 		}
 		
 			
-		System.out.println("Presionaste = ");
+		//System.out.println("Presionaste = ");
 		
 		if(mensaje==null){
 			ArbolExpresiones arbol=new ArbolExpresiones(cadena);
