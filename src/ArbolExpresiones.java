@@ -39,7 +39,8 @@ public class ArbolExpresiones
     Nodo raiz;
     Stack<Nodo> pila;
     ArrayList<String> arreglo;
-    Stack<Integer> pilaInt;
+    ArrayList<String> recorrido;
+    Stack<Float> pilaInt;
 
 
     public ArbolExpresiones(String expresion)
@@ -48,7 +49,7 @@ public class ArbolExpresiones
         raiz=null;
         pila=new Stack<Nodo>();
         arreglo=new ArrayList<String>();
-        pilaInt=new Stack<Integer>();
+        pilaInt=new Stack<Float>();
     }
 
     public ArbolExpresiones(String expresion, Nodo raiz)
@@ -112,7 +113,6 @@ public class ArbolExpresiones
         }
     }
 
-
     public void PosOrden(Nodo n)
     {
         if(n!=null)
@@ -124,21 +124,46 @@ public class ArbolExpresiones
         }
     }
 
-
+    public void enOrden(Nodo n)
+    {
+	   if (n!=null)
+	    {
+	     enOrden(n.hijoIzq);
+	     //System.out.print("--> "+((Integer)n.obtenDato()).intValue());
+	     enOrden(n.hijoDer);
+	     recorrido.add(n.token);
+	    }
+	 }
+    
+    public void preOrden(Nodo n)
+	  {
+	   if (n!=null)
+	    {
+	     //System.out.print("--> "+((Integer)n.obtenDato()).intValue());
+	     preOrden(n.hijoIzq);
+	     preOrden(n.hijoDer);
+	     recorrido.add(n.token);
+	    }
+	  }
+    
+    public void vaciarRe() {
+    	recorrido.clear();
+    }
+    
     public String evaluaExp()
     {
-        int aux=0;
+        float aux=0;
         System.out.print(arreglo);
         for(int i=0;i<arreglo.size();i++)
         {
             String car=arreglo.get(i);
             if (isNumeric(car))
             {
-                pilaInt.push(Integer.parseInt(car));
+                pilaInt.push(Float.parseFloat(car));
             }
             else{
-                int n1=pilaInt.pop();
-                int n2=pilaInt.pop();
+                float n1=pilaInt.pop();
+                float n2=pilaInt.pop();
                 switch(arreglo.get(i).charAt(0))
                 {
                     case '*': aux=n1*n2;
@@ -170,7 +195,7 @@ public class ArbolExpresiones
     public static boolean isNumeric(String cadena) {
     	boolean resultado;
     	try {
-    		Integer.parseInt(cadena);
+    		Float.parseFloat(cadena);
     		resultado=true;
     	}catch(NumberFormatException e) {
     		resultado = false;

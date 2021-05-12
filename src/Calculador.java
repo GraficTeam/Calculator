@@ -49,6 +49,9 @@ public class Calculador extends JFrame {
 	ScriptEngineManager sem = new ScriptEngineManager();
 	ScriptEngine se = sem.getEngineByName("JavaScript");
 	private JTextField txt_operacion;
+	private JLabel txt_resul = new JLabel("");
+	private Evaluador_de_expresiones evaluador= new Evaluador_de_expresiones();
+	ArbolExpresiones arbol;
 
 	/**
 	 * Create the frame.
@@ -57,16 +60,49 @@ public class Calculador extends JFrame {
 	
 	
 	public Calculador() {
-		 Evaluador_de_expresiones evaluador= new Evaluador_de_expresiones();
 		setIconImage(Toolkit.getDefaultToolkit().getImage("images/icon.png"));
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 400);
+		setBounds(100, 100, 510, 435);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		JButton Posorden = new JButton("PosOrden");
+		Posorden.setHorizontalTextPosition(SwingConstants.CENTER);
+		Posorden.setForeground(Color.WHITE);
+		Posorden.setFont(new Font("Consolas", Font.BOLD, 10));
+		Posorden.setFocusPainted(false);
+		Posorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		Posorden.setBackground(new Color(183,142,36,255));
+		Posorden.setBounds(369, 400, 90, 25);
+		contentPane.add(Posorden);
+		
+		JButton Enorden = new JButton("EnOrden");
+		Enorden.setHorizontalTextPosition(SwingConstants.CENTER);
+		Enorden.setForeground(Color.WHITE);
+		Enorden.setFont(new Font("Consolas", Font.BOLD, 10));
+		Enorden.setFocusPainted(false);
+		Enorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		Enorden.setBackground(new Color(183,142,36,255));
+		Enorden.setBounds(209, 400, 90, 25);
+		contentPane.add(Enorden);
+		
+		JButton Preorden = new JButton("PreOrden");
+		Preorden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		Preorden.setHorizontalTextPosition(SwingConstants.CENTER);
+		Preorden.setForeground(Color.WHITE);
+		Preorden.setFont(new Font("Consolas", Font.BOLD, 10));
+		Preorden.setFocusPainted(false);
+		Preorden.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		Preorden.setBackground(new Color(183,142,36,255));
+		Preorden.setBounds(55, 400, 90, 25);
+		contentPane.add(Preorden);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 25, 510, 109);
@@ -93,7 +129,6 @@ public class Calculador extends JFrame {
 		panel.add(txt_operacion);
 		txt_operacion.setColumns(10);
 
-		JLabel txt_resul = new JLabel("");
 		txt_resul.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		txt_resul.setForeground(Color.WHITE);
 		txt_resul.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -104,47 +139,14 @@ public class Calculador extends JFrame {
 		JButton btnEqual = new JButton("=");
 		btnEqual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String cadena=txt_operacion.getText();
-				String mensaje=evaluador.verifica1(cadena);
-				if(mensaje!=null)
-					JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
-				else {
-					mensaje=evaluador.verifica3(cadena);
-					if(mensaje!=null)
-						JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
-					else {
-						mensaje=evaluador.verifica2(cadena);
-						if(mensaje!=null)
-							JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
-						else {
-							mensaje=evaluador.verifica4(cadena);
-							if(mensaje!=null)
-								JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
-							
-						}
-					}
-					
-				}
-				
-					
-				System.out.println("Presionaste = ");
-				
-				if(mensaje==null){
-					ArbolExpresiones arbol=new ArbolExpresiones(cadena);
+				arbol=arb(arg0);
+				if(arbol!=null) {
 					arbol.generaArbolExp();
 					arbol.PosOrden(arbol.raiz);
 					String res=arbol.evaluaExp();
 					txt_resul.setText(res);
-					/*try { 
-						String res = se.eval(txt_operacion.getText()).toString();
-						txt_resul.setText(res);
-					} catch (ScriptException e) {
-						txt_resul.setText("ERROR");
-					}*/
 				}
-
 			}
-			
 		});
 		btnEqual.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnEqual.setForeground(Color.WHITE);
@@ -680,7 +682,7 @@ public class Calculador extends JFrame {
 		contentPane.add(btnDiv);
 		
 		JLabel mate = new JLabel("");
-		mate.setBounds(0, 134, 510, 266);
+		mate.setBounds(0, 134, 510, 301);
 		contentPane.add(mate);
 		setLocationRelativeTo(null);
 		
@@ -788,5 +790,40 @@ public class Calculador extends JFrame {
     		LayoutX = evt.getX();
     		LayoutY = evt.getY();
     	}
+    }
+    
+    private ArbolExpresiones arb(ActionEvent evt) {
+    	String cadena=txt_operacion.getText();
+		String mensaje=evaluador.verifica1(cadena);
+		if(mensaje!=null)
+			JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+		else {
+			mensaje=evaluador.verifica3(cadena);
+			if(mensaje!=null)
+				JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+			else {
+				mensaje=evaluador.verifica2(cadena);
+				if(mensaje!=null)
+					JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+				else {
+					mensaje=evaluador.verifica4(cadena);
+					if(mensaje!=null)
+						JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+					
+				}
+			}
+			
+		}
+		
+			
+		System.out.println("Presionaste = ");
+		
+		if(mensaje==null){
+			ArbolExpresiones arbol=new ArbolExpresiones(cadena);
+			return arbol;
+		}
+		else {
+			return null;
+		}
     }
 }
