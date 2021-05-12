@@ -1,8 +1,8 @@
-
 import java.util.Stack;
 
 public class Evaluador_de_expresiones {
 
+	//Verifica parentesis balanceados
 	public String verifica1(String expresion) {
 		Stack<Character> pila = new Stack<Character>();
 		boolean error=false,error2=false;
@@ -12,7 +12,6 @@ public class Evaluador_de_expresiones {
         
         for(int iCont=0; iCont<expresion.length(); iCont++){
 
-            //System.out.println(expresion.charAt(iCont));
             if(expresion.charAt(iCont)=='{'){
             	pila.push((char)expresion.charAt(iCont));
             }
@@ -87,16 +86,13 @@ public class Evaluador_de_expresiones {
         	if(error==false && error2==false) {//El error no fue de que el primer caracter fuera uno de clausura
             	if(pila.peek().equals('{')) {
             		mensaje="Error de llave que abre falta llave que cierra";
-                    //System.out.println("Error de llave que abre falta llave que cierra");
             	}
             	if(pila.peek().equals('['))
             	{
             		mensaje="Error de corchete que abre falta corchete que cierra";
-            		//System.out.println("Error de corchete que abre falta corchete que cierra");
             	}
             	if(pila.peek().equals('(')) {
             		mensaje="Error de parentesis que abre falta parentesis que cierra";
-            		//System.out.println("Error de parentesis que abre falta parentesis que cierra");
             	}
         	}else {//error2 indica que el caracter de cerradura no concuerda con el de apertura
         		if(error==false) {
@@ -109,14 +105,11 @@ public class Evaluador_de_expresiones {
         		}
         		if(fallo=='}') {
         			mensaje="Error de llave que cierra"+cadena;
-            		//System.out.println("Error de llave que cierra"+cadena);
         		}
             	if(fallo==']')
             		mensaje="Error de corchete que cierra"+cadena;
-                   // System.out.println("Error de corchete que cierra"+cadena);
             	if(fallo==')') {
             		mensaje="Error de parentesis que cierra"+cadena;
-                    //System.out.println("Error de parentesis que cierra"+cadena);
             	}
         	}
         	}
@@ -126,7 +119,7 @@ public class Evaluador_de_expresiones {
         return mensaje;
     }
 
-
+	//Verifica que las operaciones enten entre parentesis
 	 public String verifica2(String expresion)
 	    {
 		 	String mensaje=null;
@@ -141,31 +134,26 @@ public class Evaluador_de_expresiones {
 	    	 }
 	    	
 	    	 if(contadorOP==contadorSA)
-	    		 //System.out.println("Todo bien");
+
 	    		 mensaje=null;
 	    	 else
 	    		 if(contadorOP==0)
-		    		 //System.out.println("No hay operador");
 		    		 mensaje="No hay operador";
 	    		 else
-	    		 //System.out.println("Cada operacion debe estar encerrada con signos de agurpacion"); 
 	    		 mensaje="Cada operacion debe estar encerrada con signos de agrupacion";
 	    	 return mensaje;
 	    }
 	 
-	 
+	 //Verifica que eseste bien escrita
 	 public String verifica3(String expresion){
 	        char carant=expresion.charAt(0);
 	        String mensaje=null;
-	        //Se da por entendido que todas las expreciones son correctas hasta que se encuentre un error
 	        boolean error=false;
 	        int i=0;
-	        //for(int i =1;i<expresion.length();i++)
 	        while(i<expresion.length()&&error==false){
 	            if(Character.isDigit(expresion.charAt(i))||expresion.charAt(i)=='.'){
 	                if(carant==')'||carant=='}'||carant==']'){
 	                    mensaje="Error, no se puede poner un numero o un punto despues de un signo de agrupacion de cerradura (],),})\n";
-	                   // System.out.println(""+mensaje);
 	                    error=true;                    
 	                }                                       
 	                else{
@@ -183,8 +171,6 @@ public class Evaluador_de_expresiones {
 			                }
 			                else{
 			                	mensaje="Error, no se puede poner un signo de agrupacion de abertura ([,(,{) despues de un numero o un punto";
-			                    //mensaje="Error, despues de un '"+carant+"' no se puede poner un '('\n";
-			                    //System.out.println(""+mensaje);
 			                    error=true;                         
 			                }                                    
 	            	}
@@ -199,8 +185,6 @@ public class Evaluador_de_expresiones {
 		                }
 	                else{
 	                	mensaje="Error, no se puede poner un signo de agrupacion de cerradura (],),}) despues de un '"+carant+"'";
-	                    //mensaje="Error, despues de un '"+carant+"' no puede poner un ')'\n";
-	                   // System.out.println(""+mensaje);
 	                    error=true;
 	                }                                   
 	            }
@@ -213,19 +197,17 @@ public class Evaluador_de_expresiones {
 	                }
 	                else{
 	                    mensaje="Error, no se puede poner un operador ('"+expresion.charAt(i)+"') depues de un '"+carant+"'";
-	                    //mensaje="Despues de un '"+carant+"' no puede venir un Operador '"+expresion.charAt(i)+"'\n";
-	                   // System.out.println(""+mensaje);
 	                    error=true;                   
 	                }                                       
 	            }
 	           i++;
 	        }
-	        //if(expresion.charAt(i-1)=='.')
-	        	// mensaje="Error, no se puede poner '.' depues de un )";
 	        return mensaje;
 	    }
 	 
+	 //Verifica que los decimales enten bien escritos
 	 public String verifica4(String expresion) {
+			Stack<Character> pila = new Stack<Character>();
 			
 			boolean error=false;
 	        int i=0;
@@ -233,12 +215,10 @@ public class Evaluador_de_expresiones {
 	        
 	        String mensaje=null;
 	        while(iCont<expresion.length()&&error==false) {
-	        	//System.out.print("\n"+expresion.charAt(iCont));
 	        	if(expresion.charAt(iCont)=='.') {
 	        		i=iCont+1;
 	        		while(error!=true&&expresion.charAt(i)!='+'&&expresion.charAt(i)!='-'&&expresion.charAt(i)!='*'&&expresion.charAt(i)!='/'&&expresion.charAt(i)!='^'&&expresion.charAt(i)!=')'&&expresion.charAt(i)!=']'&&expresion.charAt(i)!='}'){
-	        			//System.out.print("\n"+expresion.charAt(i));
-	        			//System.out.print("Entre");
+
 	        			if(expresion.charAt(i)=='.')
 	        				error=true;
 	        			i++;
@@ -249,6 +229,5 @@ public class Evaluador_de_expresiones {
 	        if(error==true)
 	        	mensaje="Error, en el numero decimal";
 	     return mensaje;
-		}
-	 
+		} 
 }
