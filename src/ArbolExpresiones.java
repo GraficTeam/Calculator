@@ -80,7 +80,7 @@ public class ArbolExpresiones
                         else nodoActual.hijoDer=n;
                         cadena.delete(0, cadena.length());
                 	}
-                    if((caracter=='(')||(caracter=='{'))
+                    if((caracter=='('||caracter=='{'||caracter=='['))
                     {
                         if(i==0)
                         {

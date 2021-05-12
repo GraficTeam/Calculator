@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
@@ -53,136 +54,10 @@ public class Calculador extends JFrame {
 	 * Create the frame.
 	 */
 	
-	public static String verificar(String expresion) {
-		Stack<Character> pila = new Stack<Character>();
-		boolean error=false,error2=false;
-		char fallo='a';
-		String cadena;
-		int validarpop = 0;
-        int validarpush=0;
-        String sIngreso=expresion;
-        String mensaje = null;
-        
-        for(int iCont=0; iCont<sIngreso.length(); iCont++){
-
-            //System.out.println(sIngreso.charAt(iCont));
-            if(sIngreso.charAt(iCont)=='{'){
-            	pila.push((char)sIngreso.charAt(iCont));
-                validarpush++;
-            }
-	        
-	        else 
-	        	if(sIngreso.charAt(iCont) == '}'){
-	            if(!pila.empty()){ //Checa si la pila no está vacía
-	                if(pila.peek().equals('{')){ //Si el elemento al tope de la pila concuerda con el caracter a entrar
-	                    pila.pop();     //Saca el elemento del tope simbolizando que cierran bien
-	                }else {
-	                		error2=true;
-	                		fallo=sIngreso.charAt(iCont);//Guarda el caracter de cerradura errado
-	                }
-	            }
-	            else {
-	            	//La pila esta vacia y el caracter es un carater de clausura
-	            	mensaje="Error de llave que cierra se esperaba llave de apertura";
-	            	System.out.println("Error de llave que cierra se esperaba llave de apertura");
-	                error=true;//Se activa la bandera de error para finalizar el programa
-	            }
-	        }
-            if(sIngreso.charAt(iCont)=='['){
-            	pila.push((char)sIngreso.charAt(iCont));
-                validarpush++;
-            }
-            else if(sIngreso.charAt(iCont) == ']'){
-                if(!pila.empty()){ //Checa si la pila no está vacía
-                    if(pila.peek().equals('[')){ //Si el elemento al tope de la pila concuerda con el caracter a entrar
-                        pila.pop();     //Saca el elemento del tope simbolizando que cierran bien
-                    }else {
-                    		error2=true;
-                    		fallo=sIngreso.charAt(iCont);//Guarda el caracter de cerradura errado
-                    }
-                }
-                else {
-                	//La pila esta vacia y el caracter es un carater de clausura
-                	mensaje="Error de corchete que cierra se esperaba corchete de apertura";
-                	System.out.println("Error de corchete que cierra se esperaba corchete de apertura");
-                    error=true;//Se activa la bandera de error para finalizar el programa
-                	 
-                }
-            }
-
-            if(sIngreso.charAt(iCont)=='('){
-            	pila.push((char)sIngreso.charAt(iCont));
-                validarpush++;
-            }
-            else if(sIngreso.charAt(iCont) == ')'){
-                if(!pila.empty()){ //Checa si la pila no está vacía
-                    if(pila.peek().equals('(')){ //Si el elemento al tope de la pila concuerda con el caracter a entrar
-                        pila.pop();  //Saca el elemento del tope simbolizando que cierran bien
-                    }else {
-                    		error2=true;
-                    		fallo=(char)sIngreso.charAt(iCont);//Guarda el caracter de cerradura errado
-                    }
-                }
-                else {
-                	//La pila esta vacia y el caracter es un carater de clausura
-                	mensaje="Error de parentesis que cierra se esperaba parentesis de apertura"; 
-                	System.out.println("Error de parentesis que cierra se esperaba parentesis de apertura");        
-                    error=true;//Se activa la bandera de error para finalizar el programa
-                }
-            }
-            
-        
-        }
-      //La pila vacia simboliza que todos los caracteres cerraron, y no hubo error de que el primer caracter fuera uno de clausura
-        if(pila.empty() && error==false && error2==false){ 
-            System.out.println("Todos los simbolos estan balanceados");
-           
-        }
-        else{
-        	
-        	if(error==false && error2==false) {//El error no fue de que el primer caracter fuera uno de clausura
-            	if(pila.peek().equals('{')) {
-            		mensaje="Error de llave que abre falta llave que cierra";
-                    System.out.println("Error de llave que abre falta llave que cierra");
-            	}
-            	if(pila.peek().equals('['))
-            	{
-            		mensaje="Error de corchete que abre falta corchete que cierra";
-            		System.out.println("Error de corchete que abre falta corchete que cierra");
-            	}
-            	if(pila.peek().equals('(')) {
-            		mensaje="Error de parentesis que abre falta parentesis que cierra";
-            		System.out.println("Error de parentesis que abre falta parentesis que cierra");
-            	}
-        	}else {//error2 indica que el caracter de cerradura no concuerda con el de apertura
-        		if(error==false) {
-        		switch(pila.peek()) {
-        			case '(':cadena=" se esperaba un parentesis de cerradura";
-        					 break;
-        			case '[':cadena=" se esperaba un corchete de cerradura";
-					 			 break;
-        			default:cadena=" se esperaba un llave de cerradura";
-        		}
-        		if(fallo=='}') {
-        			mensaje="Error de llave que cierra"+cadena;
-            		System.out.println("Error de llave que cierra"+cadena);
-        		}
-            	if(fallo==']')
-            		mensaje="Error de corchete que cierra"+cadena;
-                    System.out.println("Error de corchete que cierra"+cadena);
-            	if(fallo==')') {
-            		mensaje="Error de parentesis que cierra"+cadena;
-                    System.out.println("Error de parentesis que cierra"+cadena);
-            	}
-        	}
-        	}
-        	
-        	
-        }
-        return mensaje;
-    }
+	
 	
 	public Calculador() {
+		 Evaluador_de_expresiones evaluador= new Evaluador_de_expresiones();
 		setIconImage(Toolkit.getDefaultToolkit().getImage("images/icon.png"));
 		setUndecorated(true);
 		setResizable(false);
@@ -230,7 +105,28 @@ public class Calculador extends JFrame {
 		btnEqual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String cadena=txt_operacion.getText();
-				String mensaje=verificar(cadena);
+				String mensaje=evaluador.verifica1(cadena);
+				if(mensaje!=null)
+					JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+				else {
+					mensaje=evaluador.verifica3(cadena);
+					if(mensaje!=null)
+						JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+					else {
+						mensaje=evaluador.verifica2(cadena);
+						if(mensaje!=null)
+							JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+						else {
+							mensaje=evaluador.verifica4(cadena);
+							if(mensaje!=null)
+								JOptionPane.showMessageDialog(null,""+mensaje, "Error", JOptionPane.WARNING_MESSAGE);
+							
+						}
+					}
+					
+				}
+				
+					
 				System.out.println("Presionaste = ");
 				
 				if(mensaje==null){
@@ -246,9 +142,7 @@ public class Calculador extends JFrame {
 						txt_resul.setText("ERROR");
 					}*/
 				}
-				else
-				
-					txt_resul.setText(mensaje);
+
 			}
 			
 		});
