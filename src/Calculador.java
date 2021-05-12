@@ -182,10 +182,15 @@ public class Calculador extends JFrame {
 					arbol.generaArbolExp();
 					arbol.PosOrden(arbol.raiz);
 					String res=arbol.evaluaExp();
-					txt_resul.setText(res);
-					arbol.vaciarRe();
+					if(res.equals("Infinity")) {
+						JOptionPane.showMessageDialog(null,"No puede dividir entre 0", "Error", JOptionPane.WARNING_MESSAGE);
+					}
+					else {
+						txt_resul.setText(res);
+						arbol.vaciarRe();
+						boton();
+					}
 				}
-				boton();
 			}
 		});
 		btnEqual.setHorizontalTextPosition(SwingConstants.CENTER);

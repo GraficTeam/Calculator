@@ -148,7 +148,6 @@ public class ArbolExpresiones
     
     public String evaluaExp()
     {
-	int band=0;
         float aux=0;
         for(int i=0;i<arreglo.size();i++)
         {
@@ -172,14 +171,7 @@ public class ArbolExpresiones
                         break;
                     case '+': aux=n1+n2;
                         break;
-                    case '/':
-				if(n1==0){
-					band = 1;
-				}
-				else{
-					aux=n2/n1;
-				}
-						
+                    case '/': aux=n2/n1;
                         break;
                     case '^':
                         double exponente;
@@ -188,17 +180,8 @@ public class ArbolExpresiones
                         break;
 
                 }
-                
-		if(band !=0){
-			
-			System.out.println("No es posible dividir sobre 0");
-			break;
-		}
-		else{
-			pilaInt.push(aux);
-		}
-		
-		
+                pilaInt.push(aux);
+
             }
         }
        return ""+pilaInt.pop();
