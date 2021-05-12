@@ -1,5 +1,4 @@
 import java.util.*;
-import java.math.*;
 
 class Nodo
 {
@@ -150,7 +149,6 @@ public class ArbolExpresiones
     public String evaluaExp()
     {
         float aux=0;
-        System.out.print(arreglo);
         for(int i=0;i<arreglo.size();i++)
         {
             String car=arreglo.get(i);
@@ -198,14 +196,5 @@ public class ArbolExpresiones
     		resultado = false;
     	}
     	return resultado;
-    }
-    
-    public static void main(String args[])
-    {
-        String exp="{(4^2)*{(8/2)-2}}";
-        ArbolExpresiones a=new ArbolExpresiones(exp);
-        a.generaArbolExp();
-        a.PosOrden(a.raiz);
-        a.evaluaExp();
     }
 }

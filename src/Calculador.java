@@ -1,12 +1,6 @@
-import java.io.*;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,12 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
 import java.awt.Frame;
@@ -27,16 +18,14 @@ import java.awt.Frame;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Window.Type;
 import java.awt.Cursor;
 import java.awt.event.MouseMotionAdapter;
-import java.util.Stack;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.*;
+
 public class Calculador extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -44,26 +33,18 @@ public class Calculador extends JFrame {
 	private int LayoutX;
 	private int LayoutY;
 	protected String contenido; 
-	JButton close = new JButton("");
-	JButton guard = new JButton("");
-	ScriptEngineManager sem = new ScriptEngineManager();
-	ScriptEngine se = sem.getEngineByName("JavaScript");
+	private JButton close = new JButton("");
+	private JButton guard = new JButton("");
 	private JTextField txt_operacion;
 	private JTextField txt_resul;
 	private Evaluador_de_expresiones evaluador= new Evaluador_de_expresiones();
 	private ArbolExpresiones arbol;
 	private String auxi=null;
-	JButton Preorden = new JButton("PreOrden");
-	JButton Enorden = new JButton("EnOrden");
-	JButton Posorden = new JButton("PosOrden");
-	JButton back = new JButton("ATRAS");
-	
-	
-	/**
-	 * Create the frame.
-	 */
-	
-	
+	private JButton Preorden = new JButton("PreOrden");
+	private JButton Enorden = new JButton("EnOrden");
+	private JButton Posorden = new JButton("PosOrden");
+	private JButton back = new JButton("ATRAS");
+	private JButton btnEqual = new JButton("=");
 	
 	public Calculador() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("images/icon.png"));
@@ -83,6 +64,7 @@ public class Calculador extends JFrame {
 					txt_operacion.setText("Recorrido en PosOrden");
 					txt_resul.setText(arbol.arreglo.toString());
 					arbol.vaciarRe();
+					btnEqual.setEnabled(false);
 				}
 			}
 		});
@@ -97,6 +79,7 @@ public class Calculador extends JFrame {
 					txt_operacion.setText(auxi);
 					txt_resul.setText(res);
 					a.vaciarRe();
+					btnEqual.setEnabled(true);
 				}
 			}
 		});
@@ -124,6 +107,7 @@ public class Calculador extends JFrame {
 					txt_operacion.setText("Recorrido EnOrden");
 					txt_resul.setText(arbol.arreglo.toString());
 					arbol.vaciarRe();
+					btnEqual.setEnabled(false);
 				}
 			}
 		});
@@ -140,9 +124,10 @@ public class Calculador extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(arbol!=null) {
 					arbol.preOrden(arbol.raiz);
-					txt_operacion.setText("Recorrido en Preorden");
+					txt_operacion.setText("Recorrido en PreOrden");
 					txt_resul.setText(arbol.arreglo.toString());
 					arbol.vaciarRe();
+					btnEqual.setEnabled(false);
 				}
 			}
 		});
@@ -190,7 +175,6 @@ public class Calculador extends JFrame {
 		txt_resul.setBounds(10, 55, 490, 54);
 		panel.add(txt_resul);
 		
-		JButton btnEqual = new JButton("=");
 		btnEqual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				arbol=arb(arg0);

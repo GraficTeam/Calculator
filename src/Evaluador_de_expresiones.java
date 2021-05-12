@@ -3,7 +3,7 @@ import java.util.Stack;
 
 public class Evaluador_de_expresiones {
 
-	public static String verifica1(String expresion) {
+	public String verifica1(String expresion) {
 		Stack<Character> pila = new Stack<Character>();
 		boolean error=false,error2=false;
 		char fallo='a';
@@ -127,7 +127,7 @@ public class Evaluador_de_expresiones {
     }
 
 
-	 public static String verifica2(String expresion)
+	 public String verifica2(String expresion)
 	    {
 		 	String mensaje=null;
 	    	int contadorSA=0;
@@ -154,7 +154,7 @@ public class Evaluador_de_expresiones {
 	    }
 	 
 	 
-	 public static String verifica3(String expresion){
+	 public String verifica3(String expresion){
 	        char carant=expresion.charAt(0);
 	        String mensaje=null;
 	        //Se da por entendido que todas las expreciones son correctas hasta que se encuentre un error
@@ -225,8 +225,7 @@ public class Evaluador_de_expresiones {
 	        return mensaje;
 	    }
 	 
-	 public static String verifica4(String expresion) {
-			Stack<Character> pila = new Stack<Character>();
+	 public String verifica4(String expresion) {
 			
 			boolean error=false;
 	        int i=0;
