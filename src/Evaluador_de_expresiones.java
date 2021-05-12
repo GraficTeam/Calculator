@@ -126,7 +126,7 @@ public class Evaluador_de_expresiones {
         return mensaje;
     }
 
-	
+
 	 public static String verifica2(String expresion)
 	    {
 		 	String mensaje=null;
