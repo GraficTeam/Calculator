@@ -162,9 +162,9 @@ public class Evaluador_de_expresiones {
 	        int i=0;
 	        //for(int i =1;i<expresion.length();i++)
 	        while(i<expresion.length()&&error==false){
-	            if(Character.isDigit(expresion.charAt(i))){
+	            if(Character.isDigit(expresion.charAt(i))||expresion.charAt(i)=='.'){
 	                if(carant==')'||carant=='}'||carant==']'){
-	                    mensaje="Error, no se puede poner un numero despues de un signo de agrupacion de cerradura (],),})\n";
+	                    mensaje="Error, no se puede poner un numero o un punto despues de un signo de agrupacion de cerradura (],),})\n";
 	                   // System.out.println(""+mensaje);
 	                    error=true;                    
 	                }                                       
@@ -182,7 +182,7 @@ public class Evaluador_de_expresiones {
 		                		carant=expresion.charAt(i);
 			                }
 			                else{
-			                	mensaje="Error, no se puede poner un signo de agrupacion de abertura ([,(,{) despues de un '"+carant+"'";
+			                	mensaje="Error, no se puede poner un signo de agrupacion de abertura ([,(,{) despues de un numero o un punto";
 			                    //mensaje="Error, despues de un '"+carant+"' no se puede poner un '('\n";
 			                    //System.out.println(""+mensaje);
 			                    error=true;                         
@@ -193,7 +193,8 @@ public class Evaluador_de_expresiones {
 		                if(carant==')'||carant=='}'||carant==']'){
 		                    carant=expresion.charAt(i);
 		                }
-		                else if(Character.isDigit(carant)){
+		                else 
+		                	if(Character.isDigit(carant)){
 		                    carant=expresion.charAt(i);
 		                }
 	                else{
@@ -219,11 +220,14 @@ public class Evaluador_de_expresiones {
 	            }
 	           i++;
 	        }
+	        //if(expresion.charAt(i-1)=='.')
+	        	// mensaje="Error, no se puede poner '.' depues de un )";
 	        return mensaje;
 	    }
 	 
 	 public static String verifica4(String expresion) {
 			Stack<Character> pila = new Stack<Character>();
+			
 			boolean error=false;
 	        int i=0;
 	        int iCont=0;
@@ -233,7 +237,7 @@ public class Evaluador_de_expresiones {
 	        	//System.out.print("\n"+expresion.charAt(iCont));
 	        	if(expresion.charAt(iCont)=='.') {
 	        		i=iCont+1;
-	        		while(error!=true&&expresion.charAt(i)!='+'&&expresion.charAt(i)!='-'&&expresion.charAt(i)!='*'&&expresion.charAt(i)!='/'&&expresion.charAt(i)!='^'){
+	        		while(error!=true&&expresion.charAt(i)!='+'&&expresion.charAt(i)!='-'&&expresion.charAt(i)!='*'&&expresion.charAt(i)!='/'&&expresion.charAt(i)!='^'&&expresion.charAt(i)!=')'&&expresion.charAt(i)!=']'&&expresion.charAt(i)!='}'){
 	        			//System.out.print("\n"+expresion.charAt(i));
 	        			//System.out.print("Entre");
 	        			if(expresion.charAt(i)=='.')
